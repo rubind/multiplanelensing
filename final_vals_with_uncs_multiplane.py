@@ -8,6 +8,10 @@ from multiplane import get_diff_time
 import tqdm
 import pickle
 
+try:
+    from commands import getoutput
+except:
+    from subprocess import getoutput
 
 def ra_dec_dist_to_xyz(ra, dec, dist):
     return [dist*np.cos(ra*np.pi/180.)*np.cos(dec*np.pi/180.), dist*np.sin(ra*np.pi/180.)*np.cos(dec*np.pi/180.), dist*np.sin(dec*np.pi/180.)]
@@ -84,7 +88,8 @@ for i in tqdm.tqdm(range(nsamp)):
     all_diff_times["All"].append(diff_time)
 
 
-pickle.dump(all_diff_times, open("all_diff_times_%i_steps=%i.pickle" % (nsamp, Shapiro_steps), 'wb'))
+getoutput("mkdir runs")
+pickle.dump(all_diff_times, open("runs/all_diff_times_%i_steps=%i.pickle" % (nsamp, Shapiro_steps), 'wb'))
 
 
 
