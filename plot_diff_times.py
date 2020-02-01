@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from multiplane import get_diff_time
 import tqdm
 import pickle
+import glob
 
 
 def getscore(vals, label = ""):
@@ -47,7 +48,7 @@ def stats_for_one_gal(these_diff_times, key, bins, label = ""):
         plt.xlim(xlim)
         
     plt.yscale('log')
-    plt.axvline(np.log10(1.734), color = 'k', zorder = 2)
+    plt.axvline(np.log10(10 - 1.734), color = 'k', zorder = 2)
     ylim = plt.ylim()
     ylim_geo_mean = np.sqrt(ylim[0]*ylim[1])
     plt.text(np.log10(1.734) + 0.025, ylim_geo_mean, "Observed GW-Photon Delay", rotation = 90, size = 9, va = 'center', ha = 'left')
@@ -59,7 +60,16 @@ def stats_for_one_gal(these_diff_times, key, bins, label = ""):
     return bins
 
 
-all_diff_times = pickle.load(open(sys.argv[1], 'rb'))
+all_diff_times = {} #pickle.load(open(sys.argv[1], 'rb'))
+for fl in glob.glob("runs/*"):
+    these_samps = pickle.load(open(fl, 'rb'))
+    for key in these_samps:
+        try:
+            all_diff_times[key] += these_samps[key]
+        except:
+            all_diff_times[key] = these_samps[key]
+
+    
 for key in all_diff_times:
     nsamp = len(all_diff_times[key])
 

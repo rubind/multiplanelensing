@@ -78,7 +78,7 @@ for i in tqdm.tqdm(range(nsamp)):
             masses.append(galmasses[key][i])
             masses_xyz.append(galxyzs[key][i])
             all_diff_times[key].append(get_diff_time(masses_xyz = [galxyzs[key][i]],
-                                                     masses = [galmasses[key][i]], source_xyz_init = ra_dec_dist_to_xyz(ra = 197.450375, dec = -23.381486, dist = gwdist[i])))
+                                                     masses = [galmasses[key][i]], source_xyz_init = ra_dec_dist_to_xyz(ra = 197.450375, dec = -23.381486, dist = gwdist[i]), Shapiro_steps = Shapiro_steps))
 
         else:
             all_diff_times[key].append((-1e10, -1e10))
