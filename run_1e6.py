@@ -15,7 +15,7 @@ for val in vals_to_run:
     f.write("""#!/bin/bash
 #SBATCH --job-name=example
 #SBATCH --partition=shared
-#SBATCH --time=0-06:00:00 ## time format is DD-HH:MM:SS
+#SBATCH --time=0-12:00:00 ## time format is DD-HH:MM:SS
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=4G # Memory per node my job requires
