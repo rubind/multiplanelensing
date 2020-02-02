@@ -4,18 +4,22 @@ import time
 commands.getoutput("rm -fr runs")
 commands.getoutput("mkdir runs")
 
-vals_to_run = range(1, 51) + range(-50, 0)
-vals_to_run = [item + 10000 for item in vals_to_run]
+vals_to_run = []
+for i in range(1000):
+    vals_to_run.append((int(1000 + i/10.), 4001 + (i*2) % 20))
 
-print(vals_to_run)
-assert sum(vals_to_run) == 1000000
+assert len(set(vals_to_run)) == len(vals_to_run)
+print(vals_to_run[:10])
+
 
 for val in vals_to_run:
+    assert val[1] % 2 == 1
+
     f = open("tmp.sh", 'w')
     f.write("""#!/bin/bash
 #SBATCH --job-name=example
 #SBATCH --partition=shared
-#SBATCH --time=0-12:00:00 ## time format is DD-HH:MM:SS
+#SBATCH --time=0-01:50:00 ## time format is DD-HH:MM:SS
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=4G # Memory per node my job requires
@@ -23,7 +27,7 @@ for val in vals_to_run:
 #SBATCH --output=example-%A.out # %A - filled with jobid, wher to write the stdout
 source ~/.bash_profile
 cd /home/drubin/multiplanelensing
-python final_vals_with_uncs_multiplane.py """ + str(val) + """ 4001 | tail""")
+python final_vals_with_uncs_multiplane.py """ + str(val[0]) + """ """ + str(val[1]) + """ | tail""")
     f.close()
     
     time.sleep(0.25)
